@@ -1,30 +1,33 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-const BlogSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true
+const BlogSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true
+    },
+    content: {
+      type: String,
+      required: true
+    },
+    image: {
+      type: String,
+    },
+    category: {
+      type: String,
+      default: 'uncategorized'
+    },
+    slug:{
+      type:String,
+      required: true,
+      unique: true,
+    }
   },
-  content: {
-    type: String,
-    required: true
-  },
-//   author: {
-//     type: String,
-//     required: true
-//   },
-  publishedDate: {
-    type: Date,
-    default: Date.now
-  },
-  views: {
-    type: Number,
-    default: 0
-  },
-  likes: {
-    type: Number,
-    default: 0
+  {
+    timestamps: true
   }
-});
+);
 
-module.exports = mongoose.model('Blog', BlogSchema);
+const Blog = mongoose.model('Blog', BlogSchema);
+
+export default Blog;
