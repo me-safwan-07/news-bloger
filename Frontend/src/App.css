@@ -1,42 +1,45 @@
-#root {
-  max-width: 1280px;
+/* src/components/Navbar.css */
+.navbar {
+  background-color: #1e40af; /* Tailwind bg-blue-600 equivalent */
+  padding: 1rem;
+  color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.navbar-brand {
+  font-size: 1.25rem;
+  font-weight: bold;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.navbar-brand a {
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.navbar-brand a:hover {
+  color: #d1d5db; /* Tailwind hover:text-gray-200 equivalent */
 }
 
-.card {
-  padding: 2em;
+.navbar-links {
+  display: flex;
+  gap: 1rem;
 }
 
-.read-the-docs {
-  color: #888;
+.navbar-links a {
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.navbar-links a:hover {
+  color: #d1d5db;
 }
