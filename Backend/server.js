@@ -1,31 +1,41 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
+import express from 'express';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import blogrouter from './routes/blogRoutes.js';
 
-// Import the routes
-const blogRoutes = require('./routes/blogRoutes');
+dotenv.config();
 
-// Create the Express app
-const app = express();
-
-// Middleware
-app.use(cors()); // Enable CORS for cross-origin requests
-app.use(express.json()); // Parse incoming JSON requests
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI, {
+      useNewUrlParser: true,        // Required for backward compatibility
+      useUnifiedTopology: true,     // Helps with handling MongoDB connections smoothly
+    });
+    console.log('MongoDB is connected');
+  } catch (err) {
+    console.error('Failed to connect to MongoDB', err);
+    process.exit(1);  // Exit process with failure
+  }
+};
 
 // Connect to MongoDB
-const mongoURI = 'mongodb://localhost:27017/news-blog';
-mongoose.connect(mongoURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-  .then(() => console.log('MongoDB connected successfully'))
-  .catch(err => console.log('MongoDB connection error:', err));
+connectDB();
 
-// Routes
-app.use('/api', blogRoutes); // Blog routes (e.g., /api/blogs)
+  const app = express();
+  app.use(express.json());
 
-// Server listening on a port
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+  app.listen(5000, () => {
+    console.log('Server is running on port 5000');
+  });
+
+  app.use('/api/blog', blogrouter);
+
+  app.use((err, req, res, next) => {
+    const statusCode = res.statusCode || 500;
+    const message = err.message || 'Internal server error';
+    res.status(statusCode).json({
+      success: true,
+      statusCode,
+      message,
+    }) 
+  });
