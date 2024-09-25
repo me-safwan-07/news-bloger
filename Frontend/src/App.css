@@ -43,3 +43,15 @@
 .navbar-links a:hover {
   color: #d1d5db;
 }
+
+.quill {
+  overflow-y: auto; /* Prevent overflow issues */
+}
+
+.react-quill {
+  min-height: 300px; /* Set a minimum height */
+}
+
+.ql-container {
+  padding-bottom: 0; /* Ensure no extra padding at the bottom */
+}
