@@ -2,7 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import blogrouter from './routes/blogRoutes.js';
-
+import cors from 'cors';
 dotenv.config();
 
 const connectDB = async () => {
@@ -22,9 +22,10 @@ const connectDB = async () => {
 connectDB();
 
   const app = express();
+  app.use(cors());  // Enable CORS for cross-origin requests
   app.use(express.json());
-
-  app.listen(5000, () => {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
     console.log('Server is running on port 5000');
   });
 
