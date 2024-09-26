@@ -1,72 +1,101 @@
+import multer from "multer";
 import Blog from "../models/Blog.js";
 import { errorHandler } from "../utils/error.js";
 
-// crate the post middleware
+// Set up Multer storage
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);  // Save file with a timestamp to avoid naming conflicts
+  },
+});
+
+const upload = multer({ storage });
+
+// Create a blog post
 export const create = async (req, res, next) => {
-  // add the admin or not 
+  // Handle the image upload using Multer
+  upload.single('image')(req, res, async (err) => {
+    if (err) {
+      return next(errorHandler(500, 'Error uploading image'));
+    }
 
-  if (!req.body.title || !req.body.content) {
-    return next(errorHandler(400, 'please provide all required fields'));
-  }
+    // Validate required fields
+    if (!req.body.title || !req.body.content) {
+      return next(errorHandler(400, 'Please provide all required fields'));
+    }
 
-  const slug = req.body.title
-    .split(' ')
-    .join('-')
-    .toLowerCase()
-    .replace(/[^a-zA-Z0-9-]/g, '');
+    // Create a slug from the title
+    const slug = req.body.title
+      .split(' ')
+      .join('-')
+      .toLowerCase()
+      .replace(/[^a-zA-Z0-9-]/g, '');
 
-  const newBlog = new Blog({
-    ...req.body,
-    slug,
+    // Prepare the new blog post
+    const newBlog = new Blog({
+      ...req.body,
+      slug,
+      image: req.file ? req.file.path : null, // Save image path if uploaded
+    });
+
+    try {
+      const savedPost = await newBlog.save();
+      res.status(201).json(savedPost);
+    } catch (err) {
+      next(err);
+    }
   });
-  try {
-    const savedPost = await newBlog.save();
-    res.status(201).json(savedPost);
-  } catch (err) {
-    next(err);
-  }
-}
+};
 
-// get the all the blog
+// Get all blogs
 export const getBlogs = async (req, res, next) => {
   try {
-    // take the all the blog posts
     const blogs = await Blog.find({});
     res.status(200).json(blogs);
   } catch (err) {
     next(err);
   }
-}
+};
 
-// Delete the custom blog
+// Delete a blog by ID
 export const deleteBlog = async (req, res, next) => {
   try {
     const blog = await Blog.findByIdAndDelete(req.params.id);
     if (!blog) return next(errorHandler(404, 'Blog not found'));
-    res.status(204).json({});
+    res.status(204).json({ message: 'Blog deleted successfully' });
   } catch (err) {
     next(err);
   }
 };
 
-// Update the custom blog
+// Update a blog by ID
 export const updateBlog = async (req, res, next) => {
-  try {
-    const updatedBlog = await Blog.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        $set: {
-          title: req.body.title,
-          content: req.body.content,
-          category: req.body.category,
-          image: req.body.image,
-        },
-      },
-      { new: true}
-    );
-    res.status(200).json(updatedBlog);
-  } catch (err) {
-    next(err);
-  }
+  upload.single('image')(req, res, async (err) => {
+    if (err) return next(errorHandler(500, 'Error uploading image'));
+
+    try {
+      const updatedData = {
+        title: req.body.title,
+        content: req.body.content,
+        category: req.body.category,
+      };
+
+      if (req.file) {
+        updatedData.image = req.file.path; // Update image if a new one is uploaded
+      }
+
+      const updatedBlog = await Blog.findByIdAndUpdate(
+        req.params.id,
+        { $set: updatedData },
+        { new: true }
+      );
+
+      res.status(200).json(updatedBlog);
+    } catch (err) {
+      next(err);
+    }
+  });
 };

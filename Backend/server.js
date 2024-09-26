@@ -3,6 +3,9 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import blogrouter from './routes/blogRoutes.js';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
 dotenv.config();
 
 const connectDB = async () => {
@@ -22,6 +25,7 @@ const connectDB = async () => {
 connectDB();
 
   const app = express();
+  app.use(express.urlencoded({ extended: true }));
   app.use(cors());  // Enable CORS for cross-origin requests
   app.use(express.json());
   const PORT = process.env.PORT || 3000;
@@ -29,6 +33,10 @@ connectDB();
     console.log('Server is running on port 5000');
   });
 
+  // Static folder for serving uploaded files
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+  app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
   app.use('/api/blog', blogrouter);
 
   app.use((err, req, res, next) => {
