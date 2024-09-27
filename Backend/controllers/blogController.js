@@ -2,19 +2,6 @@
 import Blog from "../models/Blog.js";
 import { errorHandler } from "../utils/error.js";
 
-// Set up Multer storage
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, 'uploads/');
-//   },
-//   filename: (req, file, cb) => {
-//     cb(null, Date.now() + "-" + file.originalname);  // Save file with a timestamp to avoid naming conflicts
-//   },
-// });
-
-// const upload = multer({ storage });
-
-// Create a blog post
 export const create = async (req, res, next) => {
 
   // Create a slug from the title
@@ -50,6 +37,18 @@ export const getBlogs = async (req, res, next) => {
     next(err);
   }
 };
+
+export const getBlogById = async (req, res, next) => {
+  try {
+    const blog = await Blog.findById(req.params.id);
+    if(!blog) {
+      return res.status(404).json({ message: 'Blog not found' });
+    }
+    res.status(200).json(blog);
+  } catch (err) {
+    next(err);
+  }
+}
 
 // Delete a blog by ID
 export const deleteBlog = async (req, res, next) => {
