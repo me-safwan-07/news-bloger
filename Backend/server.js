@@ -25,18 +25,18 @@ const connectDB = async () => {
 connectDB();
 
   const app = express();
-  app.use(express.urlencoded({ extended: true }));
+  app.use(express.urlencoded({ limit: '1mb', extended: true }));
   app.use(cors());  // Enable CORS for cross-origin requests
-  app.use(express.json());
+  app.use(express.json({ limit: '1mb'}));
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
     console.log('Server is running on port 5000');
   });
 
   // Static folder for serving uploaded files
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = path.dirname(__filename);
-  app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+  // const __filename = fileURLToPath(import.meta.url);
+  // const __dirname = path.dirname(__filename);
+  // app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
   app.use('/api/blog', blogrouter);
 
   app.use((err, req, res, next) => {
