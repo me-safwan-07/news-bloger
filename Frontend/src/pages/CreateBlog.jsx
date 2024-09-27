@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { Alert, Button, Select, TextInput } from 'flowbite-react';
+import React, { useState } from 'react';
+import { Button, Select, TextInput } from 'flowbite-react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Import Quill styles
 import { useNavigate } from 'react-router-dom';
@@ -8,75 +8,43 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function CreateBlog() {
-    const [formData, setFormData] = useState({});
-    const quillRef = useRef(null); // Ref for ReactQuill instance
+    const [formData, setFormData] = useState({
+        title: '',
+        category: '',
+        content: '',
+    });
+    const [content, setContent] = useState('');
     const navigate = useNavigate();
-
-    // Image Handler for React Quill
-    const handleImageUpload = async () => {
-        const input = document.createElement('input');
-        input.setAttribute('type', 'file');
-        input.setAttribute('accept', 'image/*');
-        input.click();
-
-        input.onchange = async () => {
-            const file = input.files[0];
-
-            if (file) {
-                // Create a FormData to send the image to the server
-                const data = new FormData();
-                data.append('image', file);
-
-                try {
-                    const res = await axios.post('http://localhost:3000/api/upload', data, {
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                        },
-                    });
-
-                    // If the image is uploaded successfully, insert it into the editor
-                    if (res.status === 200) {
-                        const imageUrl = res.data.url; // Assuming your backend returns the image URL
-                        const editor = quillRef.current.getEditor(); // Get the editor instance
-                        const range = editor.getSelection();
-                        editor.insertEmbed(range.index, 'image', imageUrl);
-                    }
-                } catch (error) {
-                    console.error('Error uploading image:', error);
-                    toast.error('Failed to upload image. Please try again.');
-                }
-            }
-        };
-    };
 
     // Quill modules for toolbar customization
     const modules = {
-        toolbar: {
-            container: [
-                [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                ['bold', 'italic', 'underline', 'blockquote'],
-                ['link', 'image', 'video'],
-                [{ 'align': [] }],
-                ['clean'],
-            ],
-            handlers: {
-                image: handleImageUpload, // Custom image handler
-            },
-        },
+        toolbar: [
+          [{ 'header': [1, 2, false] }],
+          ['bold', 'italic', 'underline'],
+          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+          ['image', 'video'],
+          ['clean']
+        ],
     };
 
     // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!formData.content || formData.content.length === 0) {
+        if (!content || content.length === 0) {
             toast.error('Write the content first');
             return;
         }
 
+        // Prepare the data to be sent
+        const blogData = {
+            title: formData.title,
+            category: formData.category,
+            content: content,  // Assign Quill editor content to formData
+        };
+
         try {
-            const res = await axios.post('http://localhost:3000/api/blog/create', formData);
+            const res = await axios.post('http://localhost:3000/api/blog/create', blogData);
 
             if (res.status === 201) {
                 navigate('/');
@@ -101,7 +69,7 @@ function CreateBlog() {
                 <div className="flex flex-col gap-4 sm:flex-row justify-between">
                     <TextInput
                         type='text'
-                        placeholder='Title'
+                        placeholder='Enter title'
                         required
                         id='title'
                         className='flex-1'
@@ -120,14 +88,11 @@ function CreateBlog() {
 
                 {/* Content Editor */}
                 <div className="mb-4">
-                    <ReactQuill
-                        ref={quillRef} // Attach ref to Quill editor
-                        theme='snow'
-                        placeholder='Write something...'
-                        className='h-72'
-                        modules={modules} // Pass custom modules
-                        onChange={(value) => setFormData({ ...formData, content: value })}
-                        required
+                    <ReactQuill 
+                        value={content}
+                        onChange={setContent}
+                        modules={modules}
+                        theme="snow"
                     />
                 </div>
 

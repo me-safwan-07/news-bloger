@@ -6,6 +6,7 @@ import Home from './pages/Home';
 // import TextEditor from './components/TextEditor';
 import "./App.css";
 import CreateBlog from './pages/CreateBlog';
+import BlogPage from './pages/BlogPage';
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/create" element={<CreateBlog />} />
+        <Route path='/news/:id' element={<BlogPage />} />
       </Routes>
     </Router>
   );

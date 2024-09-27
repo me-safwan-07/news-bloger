@@ -44,14 +44,24 @@
   color: #d1d5db;
 }
 
-.quill {
+/* .quill {
   overflow-y: auto; /* Prevent overflow issues */
-}
+/* } */
 
-.react-quill {
+/* .react-quill {
   min-height: 300px; /* Set a minimum height */
+/* } */
+
+/* .ql-container {
+  padding-bottom: 0; /* Ensure no extra padding at the bottom */
+/* } */
+
+.content img {
+  max-width: 100%; /* Set maximum width to 100% of the parent container */
+  height: auto;    /* Maintain aspect ratio */
 }
 
-.ql-container {
-  padding-bottom: 0; /* Ensure no extra padding at the bottom */
+.ql-editor img {
+  max-width: 500px; /* Adjust to desired size */
+  height: auto;     /* Maintain aspect ratio */
 }

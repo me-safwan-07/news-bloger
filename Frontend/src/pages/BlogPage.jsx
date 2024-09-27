@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-// import axios from 'axios';
-// import BlogCard from '../components/BlogCard';
-// 
-const BlogPosts = () => {
+import { Spinner } from 'flowbite-react';
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+function BlogPage() {
     const [blogs, setBlogs] = useState([]);
 
     useEffect(() => {
@@ -25,11 +26,11 @@ const BlogPosts = () => {
         {blogs.map((blog) => (
             <div key={blog._id}>
                 <h2>{blog.title}</h2>
-                {/* <div dangerouslySetInnerHTML={{ __html: blog.content }}></div> */}
+                <div dangerouslySetInnerHTML={{ __html: blog.content }}></div>
             </div>
         ))}
     </div>
   )
-};
+}
 
-export default BlogPosts;
+export default BlogPage
