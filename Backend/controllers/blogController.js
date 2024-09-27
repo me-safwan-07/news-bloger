@@ -1,53 +1,44 @@
-import multer from "multer";
+// import multer from "multer";
 import Blog from "../models/Blog.js";
 import { errorHandler } from "../utils/error.js";
 
 // Set up Multer storage
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/');
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);  // Save file with a timestamp to avoid naming conflicts
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, 'uploads/');
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, Date.now() + "-" + file.originalname);  // Save file with a timestamp to avoid naming conflicts
+//   },
+// });
 
-const upload = multer({ storage });
+// const upload = multer({ storage });
 
 // Create a blog post
 export const create = async (req, res, next) => {
-  // Handle the image upload using Multer
-  upload.single('image')(req, res, async (err) => {
-    if (err) {
-      return next(errorHandler(500, 'Error uploading image'));
-    }
 
-    // Validate required fields
-    if (!req.body.title || !req.body.content) {
-      return next(errorHandler(400, 'Please provide all required fields'));
-    }
-
-    // Create a slug from the title
+  // Create a slug from the title
     const slug = req.body.title
       .split(' ')
       .join('-')
       .toLowerCase()
       .replace(/[^a-zA-Z0-9-]/g, '');
 
-    // Prepare the new blog post
+  try {
+    const { title, content} = req.body;
+
     const newBlog = new Blog({
-      ...req.body,
-      slug,
-      image: req.file ? req.file.path : null, // Save image path if uploaded
+      title,
+      content,
+      slug
     });
 
-    try {
-      const savedPost = await newBlog.save();
-      res.status(201).json(savedPost);
-    } catch (err) {
-      next(err);
-    }
-  });
+    await newBlog.save();
+    res.status(201).json({ message: 'Blog created successfully.' });
+  } catch (err) {
+    console.log(err)
+    next(err);
+  }
 };
 
 // Get all blogs
