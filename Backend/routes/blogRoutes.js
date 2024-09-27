@@ -5,7 +5,7 @@ const router = express.Router();
 
 // Routes for blog operations
 router.post('/create', create);          // Create a new blog
-router.get('/get', getBlogs);            // Get all blogs
+router.get('/get/:id', getBlogs);            // Get all blogs
 router.delete('/delete/:id', deleteBlog); // Delete a blog by ID
 router.put('/update/:id', updateBlog);   // Update a blog by ID
 
