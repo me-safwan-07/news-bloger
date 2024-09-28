@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import "./App.css";
 import CreateBlog from './pages/CreateBlog';
 import BlogPage from './pages/BlogPage';
+import Dashboard from './pages/Dashboard';
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/create" element={<CreateBlog />} />
         <Route path='/blog/:id' element={<BlogPage />} />
+        <Route path='/dashboard' element={<Dashboard/> } />
       </Routes>
     </Router>
   );
