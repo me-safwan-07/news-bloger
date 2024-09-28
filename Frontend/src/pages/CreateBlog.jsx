@@ -47,8 +47,9 @@ function CreateBlog() {
             const res = await axios.post('http://localhost:3000/api/blog/create', blogData);
 
             if (res.status === 201) {
-                navigate('/');
+                const blogId = res.data.blogId;
                 toast.success('Blog published successfully!');
+                navigate('/upload-thumbnails', { state: { blogId }});
             } else {
                 const errorMessage = res.data.message || 'Something went wrong';
                 toast.error(errorMessage);

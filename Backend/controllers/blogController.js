@@ -5,27 +5,29 @@ import { errorHandler } from "../utils/error.js";
 export const create = async (req, res, next) => {
 
   // Create a slug from the title
-    const slug = req.body.title
-      .split(' ')
-      .join('-')
-      .toLowerCase()
-      .replace(/[^a-zA-Z0-9-]/g, '');
+  const slug = req.body.title
+    .split(' ')
+    .join('-')
+    .toLowerCase()
+    .replace(/[^a-zA-Z0-9-]/g, '');
 
-  try {
-    const { title, content} = req.body;
-
-    const newBlog = new Blog({
-      title,
-      content,
-      slug
-    });
-
-    await newBlog.save();
-    res.status(201).json({ message: 'Blog created successfully.' });
-  } catch (err) {
-    console.log(err)
-    next(err);
-  }
+    try {
+      const { title, content} = req.body;
+      
+      const thumbnail = req.file ? req.file.path : '';
+      const newBlog = new Blog({
+        title,
+        content,
+        slug,
+        // thumbnail
+      });
+  
+      await newBlog.save();
+      res.status(201).json({ message: 'Blog created successfully.' });
+    } catch (err) {
+      console.log(err)
+      next(err);
+    }
 };
 
 // Get all blogs
@@ -116,4 +118,5 @@ export const getBlogStats = async (req, res, next) => {
       console.error(err)
       next(err);
   }
-}
+};
+
