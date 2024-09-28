@@ -11,6 +11,9 @@ const BlogPosts = () => {
             try {
                 const res = await fetch('http://localhost:3000/api/blog/get');
                 const data = await res.json();
+
+                // sort the blog by last updated date in descenting order
+                // const sortedBlogs = data.sort((a,b) => new Date(a.updatedAt) - new Date(a.updatedAt));
                 setBlogs(data);
             } catch (err) {
                 console.error('Error fetching content:', err);

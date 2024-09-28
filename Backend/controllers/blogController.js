@@ -31,7 +31,7 @@ export const create = async (req, res, next) => {
 // Get all blogs
 export const getBlogs = async (req, res, next) => {
   try {
-    const blogs = await Blog.find({});
+    const blogs = await Blog.find({}).sort({ updatedAt: -1});
     res.status(200).json(blogs);
   } catch (err) {
     next(err);
