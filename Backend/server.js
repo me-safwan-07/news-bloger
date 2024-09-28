@@ -2,9 +2,10 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import blogrouter from './routes/blogRoutes.js';
+// import dashboardrouter from './routes/dashboardRoutes.js';
 import cors from 'cors';
 import path from 'path';
-import { fileURLToPath } from 'url';
+// import { fileURLToPath } from 'url';
 
 dotenv.config();
 
@@ -38,7 +39,7 @@ connectDB();
   // const __dirname = path.dirname(__filename);
   // app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
   app.use('/api/blog', blogrouter);
-
+  // app.use('api/dashboard', dashboardrouter);
   app.use((err, req, res, next) => {
     const statusCode = res.statusCode || 500;
     const message = err.message || 'Internal server error';
