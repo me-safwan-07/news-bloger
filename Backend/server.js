@@ -6,7 +6,7 @@ import blogrouter from './routes/blogRoutes.js';
 import cors from 'cors';
 import path from 'path';
 // import { fileURLToPath } from 'url';
-
+import adminRoutes from './routes/adminRoutes.js';
 dotenv.config();
 
 const connectDB = async () => {
@@ -31,14 +31,12 @@ connectDB();
   app.use(express.json({ limit: '1mb'}));
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
-    console.log('Server is running on port 5000');
+    console.log(`Server is running on port ${PORT}`);
   });
 
-  // Static folder for serving uploaded files
-  // const __filename = fileURLToPath(import.meta.url);
-  // const __dirname = path.dirname(__filename);
-  // app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
   app.use('/api/blog', blogrouter);
+  app.use(adminRoutes);
+
   // app.use('api/dashboard', dashboardrouter);
   app.use((err, req, res, next) => {
     const statusCode = res.statusCode || 500;
