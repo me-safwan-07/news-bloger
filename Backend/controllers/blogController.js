@@ -3,32 +3,38 @@ import Blog from "../models/Blog.js";
 import { errorHandler } from "../utils/error.js";
 
 export const create = async (req, res, next) => {
+  const { title, content } = req.body;
+
+  // Input validation
+  if (!title || !content) {
+      return res.status(400).json({ message: 'Title and content are required.' });
+  }
 
   // Create a slug from the title
-  const slug = req.body.title
-    .split(' ')
-    .join('-')
-    .toLowerCase()
-    .replace(/[^a-zA-Z0-9-]/g, '');
+  const slug = title
+      .split(' ')
+      .join('-')
+      .toLowerCase()
+      .replace(/[^a-zA-Z0-9-]/g, '');
 
-    try {
-      const { title, content} = req.body;
-      
-      const thumbnail = req.file ? req.file.path : '';
+  try {
       const newBlog = new Blog({
-        title,
-        content,
-        slug,
-        // thumbnail
+          title,
+          content,
+          slug,
       });
-  
+
       await newBlog.save();
-      res.status(201).json({ message: 'Blog created successfully.' });
-    } catch (err) {
-      console.log(err)
-      next(err);
-    }
+      res.status(201).json({ 
+          message: 'Blog created successfully.', 
+          blog: newBlog  // Include the created blog in the response
+      });
+  } catch (err) {
+      console.error('Error creating blog:', err);
+      next(err);  // Pass the error to the next middleware for handling
+  }
 };
+
 
 // Get all blogs
 export const getBlogs = async (req, res, next) => {
