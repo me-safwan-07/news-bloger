@@ -49,7 +49,7 @@ function CreateBlog() {
             if (res.status === 201) {
                 const blogId = res.data.blogId;
                 toast.success('Blog published successfully!');
-                navigate('/upload-thumbnails', { state: { blogId }});
+                navigate('/');
             } else {
                 const errorMessage = res.data.message || 'Something went wrong';
                 toast.error(errorMessage);

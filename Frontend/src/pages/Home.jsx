@@ -1,39 +1,42 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-// import axios from 'axios';
-// import BlogCard from '../components/BlogCard';
+import { Link } from 'react-router-dom';
 
-const BlogPosts = () => {
+const Home = () => {
     const [blogs, setBlogs] = useState([]);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchBlog = async () => {
+        const fetchBlogs = async () => {
             try {
                 const res = await fetch('http://localhost:3000/api/blog/get');
                 const data = await res.json();
-
-                // sort the blog by last updated date in descenting order
-                // const sortedBlogs = data.sort((a,b) => new Date(a.updatedAt) - new Date(a.updatedAt));
                 setBlogs(data);
             } catch (err) {
                 console.error('Error fetching content:', err);
+                setError('Failed to fetch blogs. Please try again later.');
             }
         };
 
-        fetchBlog();
+        fetchBlogs();
     }, []);
 
-  return (
-    <div>
-        {blogs.map((blog) => (
-            <div key={blog._id}>
-                <h2>
-                    <Link to={`/blog/${blog._id}`}>{blog.title}</Link>
-                </h2>
-            </div>
-        ))}
-    </div>
-  )
+    return (
+        <div>
+            <h1>Blog Posts</h1>
+            {error && <div>{error}</div>}
+            {blogs.length > 0 ? (
+                blogs.map((blog) => (
+                    <div key={blog._id}>
+                        <h2>
+                            <Link to={`/blog/${blog._id}`}>{blog.title}</Link>
+                        </h2>
+                    </div>
+                ))
+            ) : (
+                <div>No blog posts found.</div>
+            )}
+        </div>
+    );
 };
 
-export default BlogPosts;
+export default Home;
