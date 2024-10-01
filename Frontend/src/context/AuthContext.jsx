@@ -5,9 +5,9 @@ import axios from 'axios';
 export const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
-    const [admin, setAdmin] = useState(null);
+    const [admin, setAdmin] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState('');
 
     useEffect(() => {
         // Check for existing token in local storage
@@ -32,7 +32,7 @@ const AuthProvider = ({ children }) => {
     };
 
     const logout = () => {
-        setAdmin(null);
+        setAdmin('');
         setIsLoggedIn(false);
         localStorage.removeItem('adminToken'); // Remove token on logout
     };

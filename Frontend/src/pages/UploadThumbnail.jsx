@@ -6,7 +6,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function UploadThumbnail() {
-    const [thumbnail, setThumbnail] = useState(null);
+    const [thumbnail, setThumbnail] = useState('');
     const [loading, setLoading] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();

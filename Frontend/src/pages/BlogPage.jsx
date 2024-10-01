@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function BlogPage() {
   const { id } = useParams();
-  const [blog, setBlog] = useState(null);
+  const [blog, setBlog] = useState('');
 
   useEffect(() => {
     const fetchBlog = async () => {

@@ -66,6 +66,9 @@ function CreateBlog() {
             <ToastContainer />
             <h1 className="text-center text-3xl my-7 font-semibold">Write</h1>
             <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
+                <Button type='submit' gradientDuoTone='purpleToPink' className='text-black'>
+                    Publish
+                </Button>
                 {/* Title Input */}
                 <div className="flex flex-col gap-4 sm:flex-row justify-between">
                     <TextInput
@@ -98,9 +101,7 @@ function CreateBlog() {
                 </div>
 
                 {/* Submit Button */}
-                <Button type='submit' gradientDuoTone='purpleToPink'>
-                    Publish
-                </Button>
+                
             </form>
         </div>
     );

@@ -8,7 +8,7 @@ import BlogPage from './pages/BlogPage';
 import Dashboard from './pages/Dashboard';
 import { AuthContext } from './context/AuthContext';
 import { Login } from './pages/Login';
-
+import "./App.css"
 const App = () => {
   const { isLoggedIn } = useContext(AuthContext);
 
