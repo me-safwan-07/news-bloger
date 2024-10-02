@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import BlogPage from './BlogPage';
 import Home from './Home';
 // import { useState } from 'react';
 import { Bell, ChevronDown, Layout, Users, Pencil, Trash2 } from 'lucide-react';
+import {DashboardMonthData} from '../components/dashboard/DashboardMonthData';
+import { DashboardContext } from '../context/DashboardContext';
+
 function Dashboard() {
+    const { stats } = useContext(DashboardContext);
     const [blogs, setBlogs] = useState([]);
     const [error, setError] = useState('');
     useEffect(() => {
@@ -34,13 +38,6 @@ function Dashboard() {
     return (
         // <Home />
     <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
-      <div className="w-64 bg-white shadow-md">
-        <div className="p-4">
-          <h1 className="text-2xl font-bold text-gray-800">News Blog</h1>
-        </div>
-      </div>
-
       {/* Main Content */}
       <div className="flex-1 overflow-auto">
         {/* Header */}
@@ -52,12 +49,15 @@ function Dashboard() {
 
         {/* Dashboard Content */}
         <main className="max-w-7xl mx-auto py-6 px-4">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {/* Total Views Card */}
             <div className="bg-white shadow-md rounded p-4">
               <h3 className="text-sm font-medium">Total Views</h3>
-              <div className="text-2xl font-bold">452,389</div>
-              <p className="text-xs text-gray-500">+20.1% from last month</p>
+              {stats && stats.blogViewsPerMonth.map((monthData) => (
+                <div key={monthData._id.month}>
+                  Views: {monthData.totalViews}
+                </div>
+              ))}
             </div>
 
             {/* Avg. Time on Page Card */}
@@ -69,14 +69,17 @@ function Dashboard() {
 
             {/* Bounce Rate Card */}
             <div className="bg-white shadow-md rounded p-4">
-              <h3 className="text-sm font-medium">Bounce Rate</h3>
-              <div className="text-2xl font-bold">27.5%</div>
-              <p className="text-xs text-gray-500">-1.3% from last month</p>
+              <h3 className="text-sm font-medium">Total News</h3>
+              <div className="text-2xl font-bold"><DashboardMonthData /></div>
+            </div>
+            <div className="bg-white shadow-md rounded p-4">
+              <h3 className="text-sm font-medium">Total News</h3>
+              <div className="text-2xl font-bold"><DashboardMonthData /></div>
             </div>
           </div>
 
           {/* Blog Titles Table */}
-          <div className="bg-white shadow-md rounded mt-8 p-4">
+          <div className="bg-white  shadow-md rounded mt-8 p-4">
             <h3 className="text-lg font-bold">Blog Titles</h3>
             <p className="text-sm text-gray-500">Manage your blog posts</p>
             <table className="min-w-full mt-4">
@@ -89,9 +92,11 @@ function Dashboard() {
               </thead>
               <tbody>
                 {blogs.map((blog) => (
-                  <tr key={blog._id}>
-                    <td className="border px-4 py-2">{blog.title}</td>
-                    <td className="border px-4 py-2">{blog.date}</td>
+                  <tr key={blog._id} className="bg-gradient-to-r from-blue-500 to-purple-500">
+                    {/* addd the serial number with start with 1 */}
+                    <td className="border px-4 py-2 text-sm text-gray-900 text-center">{blogs.indexOf(blog) + 1}</td>
+                    <td className="border px-4 py-2 whitespace-normal break-words">{blog.title}</td>
+                    <td className="border px-4 py-2">{new Date(blog.createdAt).toLocaleDateString('en-GB')}</td>
                     <td className="border px-4 py-2">
                       <button className="mr-2 border p-1 rounded" onClick={() => handleUpdate(blog._id)}>
                         <Pencil className="h-4 w-4 mr-1" /> Edit
@@ -104,43 +109,6 @@ function Dashboard() {
                 ))}
               </tbody>
             </table>
-          </div>
-
-          {/* Charts */}
-          <div className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-2">
-            {/* Daily Page Views Chart */}
-            <div className="bg-white shadow-md rounded p-4">
-              <h3 className="text-lg font-bold">Daily Page Views</h3>
-              <div className="h-48 bg-gray-200 flex items-center justify-center">Line Chart: Daily Page Views</div>
-            </div>
-
-            {/* Top Articles Chart */}
-            <div className="bg-white shadow-md rounded p-4">
-              <h3 className="text-lg font-bold">Top Articles</h3>
-              <div className="h-48 bg-gray-200 flex items-center justify-center">Bar Chart: Top Articles</div>
-            </div>
-
-            {/* Traffic Sources Chart */}
-            <div className="bg-white shadow-md rounded p-4">
-              <h3 className="text-lg font-bold">Traffic Sources</h3>
-              <div className="h-48 bg-gray-200 flex items-center justify-center">Pie Chart: Traffic Sources</div>
-            </div>
-
-            {/* Recent Comments */}
-            <div className="bg-white shadow-md rounded p-4">
-              <h3 className="text-lg font-bold">Recent Comments</h3>
-              <div className="space-y-4">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="flex items-start space-x-4">
-                    <img src={`/placeholder.svg?height=40&width=40`} alt="User Avatar" className="rounded-full" />
-                    <div>
-                      <p className="font-medium">User {i}</p>
-                      <p className="text-sm text-gray-500">Great article! I learned a lot from this.</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
         </main>
       </div>

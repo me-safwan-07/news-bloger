@@ -25,3 +25,21 @@ export const getBlogStats = async (req, res, next) => {
         next(err);
     }
 }
+
+// export const getTotalViews = async (req, res, next) => {
+//     try {
+//         const totalViewsData = await Blog.aggregate([
+//             {
+//                 $group: {
+//                     _id: null,
+//                     totalViews: { $sum: "$views" },
+//                 },
+//             }
+//         ]);
+
+//         const totalViews = totalViewsData[0]?.totalViews || 0;
+//         res.json({ totalViews}) 
+//     } catch (err) {
+//         res.status(500).send({ message: err.message || 'server Error'})
+//     }
+// };

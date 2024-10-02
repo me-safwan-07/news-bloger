@@ -9,12 +9,15 @@ import Dashboard from './pages/Dashboard';
 import { AuthContext } from './context/AuthContext';
 import { Login } from './pages/Login';
 import "./App.css"
+import DashboardProvider from './context/DashboardContext';
+
 const App = () => {
   const { isLoggedIn } = useContext(AuthContext);
 
   return (
     <Router>
       <Navbar />
+      <DashboardProvider>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/create" element={<CreateBlog />} />
@@ -23,6 +26,7 @@ const App = () => {
         <Route path='/dashboard' element={isLoggedIn ? <Dashboard /> : <Navigate to="/login" />} />
         <Route path="*" element={<h1>404 Not Found</h1>} /> {/* Optional 404 route */}
       </Routes>
+      </DashboardProvider>
     </Router>
   );
 };

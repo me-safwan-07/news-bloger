@@ -65,3 +65,17 @@
   max-width: 500px; /* Adjust to desired size */
   height: auto;     /* Maintain aspect ratio */
 }
+
+/* This class defines the gradient background */
+.bg-gradient-to-r {
+  background: linear-gradient(to right, #3b82f6, #9333ea); /* Adjust colors as needed */
+}
+
+/* This ensures text wraps in the title cell */
+.whitespace-normal {
+  white-space: normal;
+}
+
+.break-words {
+  word-wrap: break-word;
+}
