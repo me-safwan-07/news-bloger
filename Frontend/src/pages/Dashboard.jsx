@@ -11,29 +11,36 @@ function Dashboard() {
     const { stats } = useContext(DashboardContext);
     const [blogs, setBlogs] = useState([]);
     const [error, setError] = useState('');
-    useEffect(() => {
-        const fetchBlogs = async () => {
-            try {
-                const res = await fetch('http://localhost:3000/api/blog/get');
-                const data = await res.json();
-                setBlogs(data);
-            } catch (err) {
-                console.error('Error fetching content:', err);
-                setError('Failed to fetch blogs. Please try again later.');
-            }
-        };
 
-        fetchBlogs();
+    useEffect(() => {
+      const fetchBlogs = async () => {
+        try {
+          const res = await axios.get('http://localhost:3000/api/blog/get');
+          setBlogs(res.data);
+        } catch (err) {
+          console.error('Error fetching content:', err);
+          setError('Failed to fetch blogs. Please try again later.');
+        }
+      };
+
+      fetchBlogs();
     }, []);
 
-  const handleDelete = (id) => {
-    setTitles(blogs.filter(blog => blog._id !== id));
-    alert("The blog post has been successfully deleted.");
-  };
+    const handleDeleteBlog = async (id) => {
+      try {
+        const res = await axios.delete(`http://localhost:3000/api/blog/delete/${id}`);
+        if (res.status === 204) { // Check for a successful response
+          setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog._id !== id));
+        }
+      } catch (err) {
+        console.error('Error deleting blog:', err);
+      }
+    };
+    
 
-  const handleUpdate = (id) => {
-    alert("Editing functionality would be implemented here.");
-  };
+    const handleUpdate = (id) => {
+      alert("Editing functionality would be implemented here.");
+    };
 
     return (
         // <Home />
@@ -101,7 +108,7 @@ function Dashboard() {
                       <button className="mr-2 border p-1 rounded" onClick={() => handleUpdate(blog._id)}>
                         <Pencil className="h-4 w-4 mr-1" /> Edit
                       </button>
-                      <button className="border p-1 rounded" onClick={() => handleDelete(blog._id)}>
+                      <button className="border p-1 rounded" onClick={() => handleDeleteBlog(blog._id)}>
                         <Trash2 className="h-4 w-4 mr-1" /> Delete
                       </button>
                     </td>

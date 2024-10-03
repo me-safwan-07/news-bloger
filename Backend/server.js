@@ -4,8 +4,6 @@ import dotenv from 'dotenv';
 import blogrouter from './routes/blogRoutes.js';
 // import dashboardrouter from './routes/dashboardRoutes.js';
 import cors from 'cors';
-import path from 'path';
-// import { fileURLToPath } from 'url';
 import adminRoutes from './routes/adminRoutes.js';
 dotenv.config();
 
