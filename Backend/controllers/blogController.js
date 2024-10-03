@@ -3,25 +3,18 @@ import Blog from "../models/Blog.js";
 import { errorHandler } from "../utils/error.js";
 
 export const create = async (req, res, next) => {
-  const { title, content } = req.body;
+  const { title, content, image } = req.body;
 
   // Input validation
   if (!title || !content) {
       return res.status(400).json({ message: 'Title and content are required.' });
   }
 
-  // Create a slug from the title
-  const slug = title
-      .split(' ')
-      .join('-')
-      .toLowerCase()
-      .replace(/[^a-zA-Z0-9-]/g, '');
-
   try {
       const newBlog = new Blog({
           title,
           content,
-          slug,
+          image,
       });
 
       await newBlog.save();

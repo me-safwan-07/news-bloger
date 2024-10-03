@@ -25,6 +25,7 @@ function CreateBlog() {
     });
     const [content, setContent] = useState('');
     const [file, setFile] = useState(null);
+
     const [imageUploadProgress, setImageUploadProgress] = useState(null);
     const [imageUploadError, setImageUploadError] = useState(null);
     const navigate = useNavigate();
@@ -92,6 +93,7 @@ function CreateBlog() {
             title: formData.title,
             category: formData.category,
             content: content,  // Assign Quill editor content to formData
+            image: formData.image
         };
 
         try {

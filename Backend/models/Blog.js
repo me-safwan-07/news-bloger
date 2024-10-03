@@ -14,10 +14,8 @@ const BlogSchema = new mongoose.Schema(
       type: String,
       default: 'uncategorized'
     },
-    slug:{
-      type:String,
-      required: true,
-      unique: true,
+    image: {
+      type: String,
     },
   },
   {

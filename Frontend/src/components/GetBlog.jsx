@@ -27,7 +27,11 @@ function GetBlog() {
                 blogs.map((blog) => (
                     <div key={blog._id}>
                         <h2>
-                            <Link to={`/blog/${blog._id}`}>{blog.title}</Link>
+                            <Link to={`/blog/${blog._id}`}>
+                                {/* store the firabse storage image */}
+                                <img src={blog.image} alt={blog.title} />
+                                <h3>{blog.title}</h3>
+                            </Link>
                         </h2>
                     </div>
                 ))
