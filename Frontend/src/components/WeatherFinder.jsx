@@ -70,7 +70,7 @@ function WeatherFinder() {
 
     return (
         <div>
-            {dateTime} | {weatherData.temp} °C
+            {dateTime} |{weatherData.name} = {weatherData.temp} °C
         </div>
     );
 }
