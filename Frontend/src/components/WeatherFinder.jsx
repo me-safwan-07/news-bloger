@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { IoLocationSharp } from "react-icons/io5";
+import { LuCloudSunRain } from "react-icons/lu";
 
 const states = [
     "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", 
@@ -69,8 +71,12 @@ function WeatherFinder() {
     }, []);
 
     return (
-        <div>
-            {dateTime} |{weatherData.name} = {weatherData.temp} °C
+        <div className="flex items-center space-x-1 md-hidden">
+            <span className="text-sm text-gray-700">{dateTime} | </span>
+            <IoLocationSharp className="text-black" />
+            <span className="text-sm text-gray-700">{weatherData.name}</span>
+            <LuCloudSunRain className="text-yellow-500" />
+            <span className="text-sm text-gray-700 ">{weatherData.temp} °C</span>
         </div>
     );
 }

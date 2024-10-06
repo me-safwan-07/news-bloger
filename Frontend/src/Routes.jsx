@@ -16,7 +16,7 @@ const Routers = () => {
 
   return (
     <Router>
-      <Navbar />
+      {/* <Navbar /> */}
       <DashboardProvider>
       <Routes>
         <Route path="/" element={<Home />} />
