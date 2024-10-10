@@ -36,6 +36,7 @@ function BlogPage() {
   return (
     <div>
         <h1>{blog.title}</h1>
+        <img className="w-full md:w-48 h-auto max-h-48 object-cover transition-transform duration-300 ease-in-out transform hover:scale-105" src={blog.image} alt={blog.title} />
         <div dangerouslySetInnerHTML={{ __html: blog.content }}></div>
     </div>
   )

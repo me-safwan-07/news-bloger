@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import blogrouter from './routes/blogRoutes.js';
 // import dashboardrouter from './routes/dashboardRoutes.js';
 import cors from 'cors';
-import adminRoutes from './routes/adminRoutes.js';
+// import adminRoutes from './routes/adminRoutes.js';
 dotenv.config();
 
 const connectDB = async () => {
@@ -33,7 +33,7 @@ connectDB();
   });
 
   app.use('/api/blog', blogrouter);
-  app.use(adminRoutes);
+  // app.use(adminRoutes);
 
   // app.use('api/dashboard', dashboardrouter);
   app.use((err, req, res, next) => {

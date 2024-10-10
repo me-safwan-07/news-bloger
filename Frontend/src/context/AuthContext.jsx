@@ -1,6 +1,6 @@
 // context/AuthContext.js
 import React, { createContext, useEffect, useState } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 
 export const AuthContext = createContext();
 
@@ -18,18 +18,18 @@ const AuthProvider = ({ children }) => {
         }
     }, []);
 
-    const login = async (email, password) => {
-        try {
-            const response = await axios.post('http://localhost:3000/api/login', { email, password });
-            const token = response.data.token;
-            setAdmin(token);
-            setIsLoggedIn(true); // Set logged in state to true
-            localStorage.setItem('adminToken', token); // Store token in local storage
-        } catch (err) {
-            console.error('Login failed:', err.response?.data.message || err.message);
-            setError(err.response?.data.message || 'Login failed. Please try again.');
-        }
-    };
+    // const login = async (email, password) => {
+    //     try {
+    //         const response = await axios.post('http://localhost:3000/api/login', { email, password });
+    //         const token = response.data.token;
+    //         setAdmin(token);
+    //         setIsLoggedIn(true); // Set logged in state to true
+    //         localStorage.setItem('adminToken', token); // Store token in local storage
+    //     } catch (err) {
+    //         console.error('Login failed:', err.response?.data.message || err.message);
+    //         setError(err.response?.data.message || 'Login failed. Please try again.');
+    //     }
+    // };
 
     const logout = () => {
         setAdmin('');
@@ -38,7 +38,7 @@ const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ admin, isLoggedIn, login, logout, error }}>
+        <AuthContext.Provider value={{ admin, isLoggedIn, setIsLoggedIn, logout, error }}>
             {children}
             {error && <div className="error-message">{error}</div>} {/* Display error message */}
         </AuthContext.Provider>

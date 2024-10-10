@@ -38,20 +38,22 @@ function GetBlog() {
             {blogs.length > 0 ? (
                 blogs.map((blog) => (
                     <div className="flex flex-col md:flex-row items-start mb-4 border rounded-lg overflow-hidden shadow-md" key={blog._id}>
-                        <Link to={`/blog/${blog._id}`} className="flex w-full relative">
-                            {/* Image positioned at the top left corner */}
-                            <img className="w-full md:w-1/3 h-auto object-cover transition-transform duration-300 ease-in-out transform hover:scale-105" src={blog.image} alt={blog.title} />
-                            {blog.category && 
-                                <span className="absolute top-2 left-2 inline-block bg-red-500 text-white text-xs font-bold uppercase rounded-full px-2 py-1 z-10">
-                                    {blog.category}
-                                </span>
-                            }
-                            <div className="flex-1 p-4">
-                                {/* Blog Title */}
-                                <h3 className="text-xl md:text-2xl font-semibold">{blog.title}</h3>
-                                <p className="text-gray-700 text-sm md:text-base">{truncateContent(blog.content)}</p>
+                        <Link to={`/blog/${blog._id}`} className="w-full relative">
+                            <div className="relative">
+                                {/* Image with max height and responsive width */}
+                                <img className="w-full md:w-48 h-auto max-h-48 object-cover transition-transform duration-300 ease-in-out transform hover:scale-105" src={blog.image} alt={blog.title} />
+                                {blog.category && 
+                                    <span className="absolute top-2 right-2 inline-block bg-red-500 text-white text-xs font-bold uppercase rounded-full px-2 py-1 z-10">
+                                        {blog.category}
+                                    </span>
+                                }
+                            </div>
+                            <div className="flex-1 p-4 flex flex-col">
+                                {/* Blog Title with responsive text size */}
+                                <h3 className="text-lg md:text-xl lg:text-2xl font-semibold">{blog.title}</h3>
+                                <p className="text-gray-700 text-sm md:text-base lg:text-lg">{truncateContent(blog.content)}</p>
                                 <div className="flex justify-between items-center mt-2">
-                                    {/* Date */}
+                                    {/* Date with responsive text size */}
                                     <p className="text-gray-500 text-xs md:text-sm flex items-center gap-2">
                                         <LuTimer className='h-4 w-4' />
                                         {formatDate(blog.createdAt)}
