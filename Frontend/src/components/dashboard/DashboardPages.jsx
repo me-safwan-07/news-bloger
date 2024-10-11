@@ -1,12 +1,15 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
 
-const Navbar = () => {
-
-  // Array of links
-  const links = [
-    { to: '/', label: 'Home' },
-  ].filter(Boolean); // Filter out null values
+function DashboardPages() {
+    const { isLoggedIn } = useContext(AuthContext);
+    
+    const links = [
+        isLoggedIn && (
+            { to: '/create', label: 'Text Editor' }
+        )
+    ].filter(Boolean); // Filter out null values
 
   return (
     <nav className="p-2 shadow-lg">
@@ -21,6 +24,6 @@ const Navbar = () => {
       </div>
     </nav>
   );
-};
+}
 
-export default Navbar;
+export default DashboardPages

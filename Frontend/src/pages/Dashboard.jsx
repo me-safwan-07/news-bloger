@@ -6,6 +6,7 @@ import Home from './Home';
 import { Bell, ChevronDown, Layout, Users, Pencil, Trash2 } from 'lucide-react';
 import {DashboardMonthData} from '../components/dashboard/DashboardMonthData';
 import { DashboardContext } from '../context/DashboardContext';
+import DashboardPages from '../components/dashboard/DashboardPages';
 
 function Dashboard() {
     const { stats } = useContext(DashboardContext);
@@ -84,7 +85,9 @@ function Dashboard() {
               <div className="text-2xl font-bold"><DashboardMonthData /></div>
             </div>
           </div>
-
+            
+          <DashboardPages />
+          
           {/* Blog Titles Table */}
           <div className="bg-white  shadow-md rounded mt-8 p-4">
             <h3 className="text-lg font-bold">Blog Titles</h3>
@@ -97,6 +100,7 @@ function Dashboard() {
                   <th className="px-4 py-2">Actions</th>
                 </tr>
               </thead>
+              
               <tbody>
                 {blogs.map((blog) => (
                   <tr key={blog._id} className="bg-gradient-to-r from-blue-500 to-purple-500">
