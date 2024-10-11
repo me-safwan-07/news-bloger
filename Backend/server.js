@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import blogrouter from './routes/blogRoutes.js';
+import categoriesrouter from './routes/categoryRoutes.js';
 // import dashboardrouter from './routes/dashboardRoutes.js';
 import cors from 'cors';
 // import adminRoutes from './routes/adminRoutes.js';
@@ -33,7 +34,7 @@ connectDB();
   });
 
   app.use('/api/blog', blogrouter);
-  // app.use(adminRoutes);
+  app.use('/api/categories', categoriesrouter);
 
   // app.use('api/dashboard', dashboardrouter);
   app.use((err, req, res, next) => {
