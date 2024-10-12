@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Select, TextInput, Alert, FileInput } from 'flowbite-react';
 import {
   getDownloadURL,
@@ -24,8 +24,8 @@ function CreateBlog() {
         image: '',
     });
     const [content, setContent] = useState('');
+    const [category, setCategory] = useState([]);
     const [file, setFile] = useState(null);
-
     const [imageUploadProgress, setImageUploadProgress] = useState(null);
     const [imageUploadError, setImageUploadError] = useState(null);
     const navigate = useNavigate();
@@ -41,6 +41,19 @@ function CreateBlog() {
         ],
     };
 
+    useEffect(() => {
+        fetchCategories();
+    }, []);
+
+    const fetchCategories = async () => {
+        try {
+            const response = await axios.get('http://localhost:3000/api/categories/');
+            setCategory(response.data);
+        } catch (error) {
+            console.error('Error fetching categories:',error);
+        }
+    }
+    
     const handleUpdloadImage = async () => {
         try {
             if (!file) {
@@ -137,9 +150,12 @@ function CreateBlog() {
                 {/* Category Select */}
                 <div className="mb-4">
                     <Select onChange={(e) => setFormData({ ...formData, category: e.target.value })}>
-                        <option value='uncategorized'>Select a category</option>
-                        <option value='sports'>Sports</option>
-                        <option value='politics'>Politics</option>
+                        <option value=''>Select a category</option>
+                        {category.map((cat) => (
+                            <option key={cat._id} value={cat.category}>
+                                {cat.category}
+                            </option>
+                        ))}
                     </Select>
                 </div>
                 <div className='flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3'>
