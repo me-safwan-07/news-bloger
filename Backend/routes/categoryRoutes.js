@@ -3,7 +3,8 @@ import {
     addCategories, 
     deleteCategory, 
     getCategories, 
-    updateCategories 
+    updateCategories, 
+    updateSingleCategories
 } from '../controllers/categoryController.js';
 
 
@@ -13,6 +14,7 @@ const router = express.Router();
 router.get('/', getCategories); 
 router.post('/add', addCategories);
 router.delete('/delete/:id', deleteCategory);
-router.put('/update/:id', updateCategories);
+router.put('/update/:id', updateSingleCategories);
+router.put('/update', updateCategories);
 
 export default router;

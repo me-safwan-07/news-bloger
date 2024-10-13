@@ -20,7 +20,7 @@ const Navbar = () => {
     <nav className="p-2 shadow-lg">
       <div className="container mx-auto flex justify-center">
         <div className="flex space-x-4">
-          <Link to={"/home"} className="hover:text-gray-500">
+          <Link to={"/"} className="hover:text-gray-500">
               Home
           </Link>
           {navOptions.map((nav, index) => (
