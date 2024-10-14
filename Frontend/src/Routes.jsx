@@ -12,7 +12,7 @@ import "./App.css"
 import DashboardProvider from './context/DashboardContext';
 import AdminLogin from './pages/AdminLogin';
 import DashboardCategory from './components/dashboard/DashboardCategory';
-
+import CategoryPage from './pages/CategoryPage';
 const Routers = () => {
   const { isLoggedIn } = useContext(AuthContext);
 
@@ -28,6 +28,7 @@ const Routers = () => {
         {/* <Route path='/login' element={isLoggedIn ? <Navigate to="/dashboard" /> : <Login />} /> */}
         <Route path='/dashboard' element={<Dashboard />} />
         <Route path='/dashboard/categorys' element={<DashboardCategory />} />
+        <Route path='/:category' element={<CategoryPage />} />
         <Route path="*" element={<h1>404 Not Found</h1>} /> {/* Optional 404 route */}
       </Routes>
       </DashboardProvider>

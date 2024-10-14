@@ -47,7 +47,7 @@ function Dashboard() {
                     <nav className="mt-4">
                         <ul>
                             <li className="py-2"><a href="/dashboard/categorys" className="text-gray-700">Category</a></li>
-                            <li className="py-2"><a href="#" className="text-gray-700">Analytics</a></li>
+                            <li className="py-2"><a href="/create" className="text-gray-700">Write News</a></li>
                             <li className="py-2"><a href="#" className="text-gray-700">Settings</a></li>
                         </ul>
                     </nav>
