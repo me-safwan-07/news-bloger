@@ -7,9 +7,9 @@ const Home = () => {
 
     return (
         <div>
-            <TopHeader />
+            {/* <TopHeader />
             <WebsiteName />
-            <Navbar />
+            <Navbar /> */}
             <GetBlog />
         </div>
     );

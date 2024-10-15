@@ -13,11 +13,15 @@ import DashboardProvider from './context/DashboardContext';
 import AdminLogin from './pages/AdminLogin';
 import DashboardCategory from './components/dashboard/DashboardCategory';
 import CategoryPage from './pages/CategoryPage';
+import TopHeader from './components/TopHeader';
+import WebsiteName from './components/WebsiteName';
 const Routers = () => {
   const { isLoggedIn } = useContext(AuthContext);
 
   return (
     <Router>
+      <TopHeader />
+      <WebsiteName />
       {/* <Navbar /> */}
       <DashboardProvider>
       <Routes>
