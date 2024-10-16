@@ -79,3 +79,22 @@
 .break-words {
   word-wrap: break-word;
 }
+
+/* importatnt */
+/* Custom scrollbar style */
+.scrollbar-visible {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #888 #f0f0f0; /* Firefox */
+}
+
+/* For WebKit browsers (Chrome, Safari, etc.) */
+.scrollbar-visible::-webkit-scrollbar {
+  height: 4px;
+  background-color: #f0f0f0; /* Scrollbar track color */
+}
+
+.scrollbar-visible::-webkit-scrollbar-thumb {
+  background-color: #888; /* Scrollbar thumb color */
+  border-radius: 10px; /* Rounded scroll thumb */
+}
+

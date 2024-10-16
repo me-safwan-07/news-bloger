@@ -1,7 +1,6 @@
 // src/App.js
 import React, { useContext } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import CreateBlog from './pages/CreateBlog';
 import BlogPage from './pages/BlogPage';
@@ -22,7 +21,7 @@ const Routers = () => {
   return (
     <Router>
       <Header />
-      <WebsiteName />
+      {/* <WebsiteName /> */}
       {/* <Navbar /> */}
       <DashboardProvider>
       <Routes>
