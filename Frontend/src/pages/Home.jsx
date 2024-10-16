@@ -7,9 +7,6 @@ const Home = () => {
 
     return (
         <div>
-            {/* <TopHeader />
-            <WebsiteName />
-            <Navbar /> */}
             <GetBlog />
         </div>
     );
