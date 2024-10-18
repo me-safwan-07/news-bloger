@@ -189,7 +189,7 @@ function CreateBlog() {
                 <img
                     src={formData.image}
                     alt='upload'
-                    className='w-full h-72 object-cover'
+                    className='relative aspect-video w-full h-72 object-cover'
                 />
                 )}
                 {/* Content Editor */}

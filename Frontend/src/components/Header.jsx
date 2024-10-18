@@ -138,15 +138,7 @@ const Header = () => {
                                     </Link>
                                 ))
                             )}
-                            <Link to="/dashborad">Dashboard</Link>
-                            <Link to="/dashborad">Dashboard</Link>
-                            <Link to="/dashborad">Dashboard</Link>
-                            <Link to="/dashboard">Dashboard 5</Link>
-                            <Link to="/dashboad">Dashboard</Link>
-                            <Link to="/dashboad">Dashboard</Link>
-                            <Link to="/dashboad">Dashboard</Link>
-                            <Link to="/dashboad">Dashboard</Link>
-                            <Link to="/dashboad">Dashboard</Link>
+                            <Link to="/dashboard">Dashboard</Link>
                         </div>
                     </div>
                 </nav>

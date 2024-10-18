@@ -6,6 +6,19 @@ function GetBlog() {
     const [blogs, setBlogs] = useState([]);
     const [error, setError] = useState('');
     const [first, setFirst] = useState([]);
+    const [sliceblog, setSliceblog] = useState([]);
+    const [category, setCategory] = useState([]);
+    const [titleSize, setTitleSize] = useState(150);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setTitleSize(window.innerWidth <= 425 ? 75 : 150);
+        };
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         const fetchBlogs = async () => {
@@ -17,7 +30,10 @@ function GetBlog() {
                 const data = await res.json();
                 setBlogs(data);
                 setFirst(data.slice(0, 5));
-                console.log(data);
+                // const allIds = data.map(blog => blog._id);
+                setSliceblog(data.slice(5));
+                const uniqueCategories = Array.from(new Set(data.map(blog => blog.category.toLowerCase())));
+                setCategory(uniqueCategories);
             } catch (err) {
                 console.error('Error fetching content:', err);
                 setError('Failed to fetch blogs. Please try again later.');
@@ -25,7 +41,7 @@ function GetBlog() {
         };
 
         fetchBlogs();
-    }, []);    
+    }, []);
 
     const truncateContent = (content, limit = 100) => {
         const text = content.replace(/<[^>]*>/g, '');
@@ -46,13 +62,15 @@ function GetBlog() {
                     {/* First blog post with larger layout */}
                     <div className="flex flex-col md:flex-row items-start mb-4 border rounded-lg overflow-hidden shadow-md w-full md:w-1/3">
                         <Link to={`/blog/${first[0]._id}`} className="w-full relative">
-                            <img className="w-full h-52 object-cover transition-transform duration-300 ease-in-out transform hover:scale-105" src={first[0].image} alt={first[0].title} />
+                            <img className="relative aspect-video transition-transform duration-300 ease-in-out transform hover:scale-105" src={first[0].image} alt={first[0].title} />
                             <div className="p-4 flex flex-col">
-                                <h3 className="text-xl lg:text-2xl font-semibold">{first[0].title}</h3>
-                                <p className="text-gray-700 text-lg">{truncateContent(first[0].content, 150)}</p>
+                                <h3 className="text-lg lg:text-xl font-semibold">{first[0].title}</h3>
+                                {first[0].title.length < 100 && (
+                                    <p className="text-gray-700 text-lg">{truncateContent(first[0].content, 100)}</p>
+                                )}
                                 <div className="flex justify-between items-center mt-2">
-                                    <p className="text-gray-500 text-sm flex items-center gap-2">
-                                        <LuTimer className='h-4 w-4' />
+                                    <p className="text-gray-500 text-xs flex items-center gap-2">
+                                        <LuTimer className='h-3 w-3' />
                                         {formatDate(first[0].createdAt)}
                                     </p>
                                 </div>
@@ -61,20 +79,23 @@ function GetBlog() {
                     </div>
 
                     {/* Grid for subsequent blog posts */}
-                    <div className="grid grid-cols-2 w-full md:w-2/3 border">
+                    <div className="flex flex-col w-full md:w-2/3 md:ml-2 p-0">
                         {first.slice(1).map((blog) => (
-                            <div key={blog._id} className="border h-max rounded-lg overflow-hidden ">
-                                <Link to={`/blog/${blog._id}`} className='flex gap-2 border'>
-                                    
-                                    <div className="p-2">
-                                        <h3 className="text-sm font-semibold">{blog.title}</h3>
-                                        {/* <p className="text-gray-600 text-xs">{truncateContent(blog.content, 50)}</p>
-                                        <div className="flex items-center mt-1 text-gray-500 text-xs">
-                                            <LuTimer className='h-4 w-4' />
-                                            <span className="ml-1">{formatDate(blog.createdAt)}</span>
-                                        </div> */}
+                            <div key={blog._id} className="h-max rounded-lg overflow-hidden border mb-1">
+                                <Link to={`/blog/${blog._id}`} className='flex gap-2 m-2 md-2 '>
+                                    <div className="flex-grow">
+                                        <h3 className="text-xs md:text-sm font-semibold mb-2">{truncateContent(blog.title, titleSize)}</h3>
+                                        <p className="hidden md:block text-gray-600 text-xs text-muted-foreground mb-2 ">{truncateContent(blog.content, 50)}</p>
+                                        <div className="flex justify-between items-center ">
+                                            <p className="text-gray-500 text-xs flex items-center gap-1">
+                                                <LuTimer className='h-3 w-3' />
+                                                {formatDate(blog.createdAt)}
+                                            </p>
+                                        </div>
                                     </div>
-                                    <img src={blog.image} alt={blog.title} className='w-1/3 h-auto object-cover' />
+                                    <img 
+                                        src={blog.image} alt={blog.title} 
+                                        className='relative sm:w-32 aspect-video h-10 md:w-1/5 md:h-auto object-cover transition-transform duration-300 ease-in-out transform hover:scale-105' />
                                 </Link>
                             </div>
                         ))}
@@ -84,6 +105,46 @@ function GetBlog() {
                 <div>No blog posts found.</div>
             )}
             <hr />
+
+            <div className="">
+                {category.map((cat) => {
+                    // Filter the blogs for the current category
+                    const filteredBlogs = sliceblog.filter(blog => blog.category.toLowerCase() === cat.toLowerCase());
+
+                    // Only render the category if there are more than one blog posts
+                    if (filteredBlogs.length > 0) {
+                        return (
+                            <div key={cat}>
+                                <h2 className='text-xl md:text-2xl'>{cat.toUpperCase()}</h2>
+
+                                {/* Display filtered blog posts for the current category */}
+                                {filteredBlogs.map((post) => (
+                                    <div key={post._id} className="h-max rounded-lg overflow-hidden border mb-1">
+                                        <Link to={`/blog/${post._id}`} className='flex gap-2 m-2 md-2 '>
+                                            <div className="flex-grow">
+                                                <h3 className="text-xs md:text-sm font-semibold mb-2">{truncateContent(post.title, titleSize)}</h3>
+                                                <p className="hidden md:block text-gray-600 text-xs text-muted-foreground mb-2 ">{truncateContent(post.content, 50)}</p>
+                                                <div className="flex justify-between items-center ">
+                                                    <p className="text-gray-500 text-xs flex items-center gap-1">
+                                                        <LuTimer className='h-3 w-3' />
+                                                        {formatDate(post.createdAt)}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <img 
+                                                src={post.image} alt={post.title} 
+                                                className='relative sm:w-32 aspect-video h-10 md:w-1/5 md:h-auto object-cover transition-transform duration-300 ease-in-out transform hover:scale-105' />
+                                        </Link>
+                                    </div>
+                                ))}
+                            </div>
+                        );
+                    }
+
+                    // Return null if the category doesn't meet the criteria
+                    return null;
+                })}
+            </div>
         </div>
     );
 }
