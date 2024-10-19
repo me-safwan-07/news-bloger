@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LuTimer } from "react-icons/lu";
+import FakeAd from './FakeAd';
 
 function GetBlog() {
     const [blogs, setBlogs] = useState([]);
@@ -55,6 +56,7 @@ function GetBlog() {
     };
 
     return (
+        <div className="flex flex-wrap">
         <div className="mx-auto p-4">
             {error && <div className="text-red-500 mb-4">{error}</div>}
             {first.length > 0 ? (
@@ -77,7 +79,7 @@ function GetBlog() {
                             </div>
                         </Link>
                     </div>
-
+                    {/* <FakeAd className={"w-5 h-5"} /> */}
                     {/* Grid for subsequent blog posts */}
                     <div className="flex flex-col w-full md:w-2/3 md:ml-2 p-0">
                         {first.slice(1).map((blog) => (
@@ -144,7 +146,12 @@ function GetBlog() {
                     // Return null if the category doesn't meet the criteria
                     return null;
                 })}
+                
             </div>
+        </div>
+        <aside>
+                    <FakeAd className={"ml-2 md:w-full md:h-auto"} />
+                </aside>
         </div>
     );
 }
