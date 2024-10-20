@@ -1,4 +1,7 @@
 /* importatnt */
+* {
+  max-width: 1600px;
+}
 /* Custom scrollbar style */
 .scrollbar-visible {
   scrollbar-width: thin; /* Firefox */
