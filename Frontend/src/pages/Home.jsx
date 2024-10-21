@@ -7,13 +7,14 @@ import 'react-circular-progressbar/dist/styles.css';
 // components
 import FakeAd from '../components/FakeAd';
 import {HeroSection} from '../components/home/HeroSection';
+import { HorizontialNews } from '../components/home/HorizontialNews';
 const Home = () => {
     const [blogs, setBlogs] = useState([]);
     const [error, setError] = useState('');
     const [mainNews, setMainNews] = useState([]);
     const [sliceblog, setSliceblog] = useState([]);
     const [category, setCategory] = useState([]);
-    const [titleSize, setTitleSize] = useState(150);
+    const [titleSize, setTitleSize] = useState(55);
 
     useEffect(() => {
         const handleResize = () => {
@@ -61,14 +62,15 @@ const Home = () => {
 
     return (
         <div className="flex flex-wrap">
-            <div className="w-full md:w-3/4 mx-auto p-4">
+            <div className="w-full md:w-3/4 md:mx-auto md:p-4">
                 {error && <div className="text-red-500 mb-4">{error}</div>}
 
                 {/* Hero Section */}
                 <HeroSection mainNews={mainNews} truncateContent={truncateContent} formatDate={formatDate} />
                 <hr />
+                <HorizontialNews mainNews={mainNews} truncateContent={truncateContent} formatDate={formatDate}/>
 
-                <div>
+                {/* <div>
                     {category.map((cat) => {
                         const filteredBlogs = sliceblog.filter(blog => blog.category.toLowerCase() === cat.toLowerCase());
 
@@ -102,7 +104,7 @@ const Home = () => {
 
                         return null;
                     })}
-                </div>
+                </div> */}
             </div>
             
             <div className="w-full md:w-1/4 borde">
