@@ -3,17 +3,23 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
+  const [news, setNews] = useState([]);
   const [navOptions, setNavOptions] = useState([]);
-  const [error, setError] = useState(null); // For error handling
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchNavOptions = async () => {
       try {
         const response = await axios.get('http://localhost:3000/api/categories/');
+        const response2 = await axios.get('http://localhost:3000/api/blog/get/');
         setNavOptions(response.data);
+        setNews(response2.data);
       } catch (err) {
         console.error('Error fetching navigation options:', err);
-        setError('Failed to load navigation options.'); // Set error message
+        setError('Failed to load navigation options.');
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -24,21 +30,25 @@ const Navbar = () => {
     <nav className="p-2 shadow-lg">
       <div className="container mx-auto flex justify-center">
         <div className="flex space-x-4">
-          <Link to="/" className="hover:text-gray-500">
-            Home
-          </Link>
-          {error ? (
-            <span className="text-red-500">{error}</span> // Display error message
+          <Link to="/" className="hover:text-gray-500">Home</Link>
+
+          {loading ? (
+            <span className="text-gray-500">Loading...</span>
+          ) : error ? (
+            <span className="text-red-500">{error}</span>
           ) : (
-            navOptions.map((nav, index) => (
-              <Link key={index} to={`/${nav.category.toLowerCase()}`} className="hover:text-gray-500">
-                {nav.category}
-              </Link>
-            ))
+            navOptions
+              .filter(nav => nav.category && nav.category.length > 0) // Ensure category is valid
+              .filter(nav => news.some(item => item.category === nav.category)) // Filter based on news
+              .map(nav => (
+                <Link key={nav.id} to={`/${nav.category.toLowerCase()}`} className="hover:text-gray-500">
+                  {nav.category}
+                </Link>
+                
+              ))
           )}
-          <Link to="/dashboard" className="hover:text-gray-500">
-            Dashboard
-          </Link>
+
+          <Link to="/dashboard" className="hover:text-gray-500">Dashboard</Link>
         </div>
       </div>
     </nav>

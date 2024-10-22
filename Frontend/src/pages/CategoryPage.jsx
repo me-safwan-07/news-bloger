@@ -25,7 +25,7 @@ const useFetchNews = (category) => {
         news.category.toLowerCase() === category.toLowerCase()
     );
 
-    console.log(filteredNews,category);
+    // console.log(filteredNews,category);
     return { filteredNews, error };
 };
 

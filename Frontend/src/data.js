@@ -7,3 +7,26 @@ export const states = [
     "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", 
     "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Delhi"
 ];
+
+export const DashboardSidebarData = [
+    {
+        title:"",
+        link: ""
+    },
+    {
+        title:"",
+        link: ""
+    },
+    {
+        title:"",
+        link: ""
+    },
+    {
+        title:"",
+        link: ""
+    },
+    {
+        title:"",
+        link: ""
+    },
+]
