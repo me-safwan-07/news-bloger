@@ -8,25 +8,25 @@ export const states = [
     "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Delhi"
 ];
 
-export const DashboardSidebarData = [
+export const dashboardSidebarData = [
     {
-        title:"",
-        link: ""
+        title:"Dashboard",
+        link: "/dashboard"
     },
     {
-        title:"",
-        link: ""
+        title:"Write News",
+        link: "/create"
     },
     {
-        title:"",
-        link: ""
+        title:"Category",
+        link: "#"
     },
     {
-        title:"",
-        link: ""
+        title:"Earning",
+        link: "#"
     },
     {
-        title:"",
-        link: ""
+        title:"Analytics",
+        link: "#"
     },
 ]

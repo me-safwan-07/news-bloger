@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Bell, ChevronDown, Layout, Users, Pencil, Trash2 } from 'lucide-react';
 import { DashboardContext } from '../context/DashboardContext';
 import {DashboardMonthData} from '../components/dashboard/DashboardMonthData';
+import DashboardSIdebar from '../components/dashboard/DashboardSIdebar';
 
 function Dashboard() {
     const { stats } = useContext(DashboardContext);
@@ -41,18 +42,7 @@ function Dashboard() {
     return (
         <div className="flex h-screen bg-gray-100">
             {/* Sidebar */}
-            <aside className="w-64 bg-white shadow-md">
-                <div className="p-4">
-                    <h2 className="text-lg font-bold">Dashboard Menu</h2>
-                    <nav className="mt-4">
-                        <ul>
-                            <li className="py-2"><a href="/dashboard/categorys" className="text-gray-700">Category</a></li>
-                            <li className="py-2"><a href="/create" className="text-gray-700">Write News</a></li>
-                            <li className="py-2"><a href="#" className="text-gray-700">Settings</a></li>
-                        </ul>
-                    </nav>
-                </div>
-            </aside>
+            <DashboardSIdebar />
 
             {/* Main Content */}
             <div className="flex-1 overflow-auto">
