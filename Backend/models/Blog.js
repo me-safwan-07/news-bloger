@@ -17,6 +17,10 @@ const BlogSchema = new mongoose.Schema(
     image: {
       type: String,
     },
+    views: {
+      type: Number,
+      default: 0,
+    },
     slug: {
       type: String,
       unique: true, // Ensures slug is unique for each blog record

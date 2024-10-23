@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { Bell, ChevronDown, Layout, Users, Pencil, Trash2 } from 'lucide-react';
+import { Bell, ChevronDown, Layout, List } from 'lucide-react';
 import { DashboardContext } from '../context/DashboardContext';
-import {DashboardMonthData} from '../components/dashboard/DashboardMonthData';
+import { LuTimer } from "react-icons/lu";
 import DashboardSIdebar from '../components/dashboard/DashboardSIdebar';
 
 function Dashboard() {
     const { stats } = useContext(DashboardContext);
     const [blogs, setBlogs] = useState([]);
     const [error, setError] = useState('');
+    const [isBoxView, setIsBoxView] = useState(true);  // State to toggle between views
 
     useEffect(() => {
         const fetchBlogs = async () => {
@@ -24,19 +25,15 @@ function Dashboard() {
         fetchBlogs();
     }, []);
 
-    const handleDeleteBlog = async (id) => {
-        try {
-            const res = await axios.delete(`http://localhost:3000/api/blog/delete/${id}`);
-            if (res.status === 204) {
-                setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog._id !== id));
-            }
-        } catch (err) {
-            console.error('Error deleting blog:', err);
-        }
+    const truncateContent = (content, limit = 100) => {
+        const text = content.replace(/<[^>]*>/g, '');
+        return text.length > limit ? `${text.substring(0, limit)}...` : text;
     };
 
-    const handleUpdate = (id) => {
-        alert("Editing functionality would be implemented here.");
+    const formatDate = (dateString) => {
+        const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-GB', options);
     };
 
     return (
@@ -46,15 +43,32 @@ function Dashboard() {
 
             {/* Main Content */}
             <div className="flex-1 overflow-auto">
-                {/* Header */}
-                <header className="bg-white shadow-sm">
-                    <div className="max-w-7xl mx-auto py-4 px-4 flex justify-between items-center">
-                        <h2 className="text-2xl font-bold leading-7 text-gray-900">Dashboard</h2>
-                        <div className="flex items-center">
-                            <Bell className="h-5 w-5 text-gray-700 mr-4" />
-                            <div className="relative">
-                                <button className="flex items-center">
-                                    <span className="mr-2">Admin</span>
+                {/* Top Bar */}
+                <header className="bg-white shadow-sm p-4">
+                    <div className="max-w-7xl mx-auto flex justify-between items-center">
+                        {/* Search and Balance */}
+                        <div className="flex space-x-4 items-center">
+                            <input
+                                type="text"
+                                placeholder="Search..."
+                                className="bg-gray-200 rounded-full px-4 py-2 outline-none"
+                            />
+                            <div className="bg-blue-100 text-blue-700 px-3 py-2 rounded-full">
+                                Balance: $55144
+                            </div>
+                        </div>
+
+                        {/* User Profile */}
+                        <div className="flex items-center space-x-4">
+                            <Bell className="h-5 w-5 text-gray-700" />
+                            <div className="flex items-center">
+                                <img
+                                    src="https://via.placeholder.com/32"
+                                    alt="Profile"
+                                    className="rounded-full h-8 w-8"
+                                />
+                                <button className="flex items-center ml-2">
+                                    <span className="mr-2">Mr. Jhone</span>
                                     <ChevronDown className="h-4 w-4" />
                                 </button>
                             </div>
@@ -64,62 +78,53 @@ function Dashboard() {
 
                 {/* Dashboard Content */}
                 <main className="max-w-7xl mx-auto py-6 px-4">
-                    <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                        {/* Total Views Card */}
-                        <div className="bg-white shadow-md rounded p-4">
-                            <h3 className="text-sm font-medium">Total Views</h3>
-                            {stats && stats.blogViewsPerMonth.map((monthData) => (
-                                <div key={monthData._id.month}>
-                                    Views: {monthData.totalViews}
-                                </div>
-                            ))}
-                        </div>
-
-                        {/* Avg. Time on Page Card */}
-                        <div className="bg-white shadow-md rounded p-4">
-                            <h3 className="text-sm font-medium">Avg. Time on Page</h3>
-                            <div className="text-2xl font-bold">3m 42s</div>
-                            <p className="text-xs text-gray-500">+2.4% from last month</p>
-                        </div>
-
-                        {/* Bounce Rate Card */}
-                        <div className="bg-white shadow-md rounded p-4">
-                            <h3 className="text-sm font-medium">Total News</h3>
-                            <div className="text-2xl font-bold"><DashboardMonthData /></div>
+                    {/* Trending Section */}
+                    <div className="flex justify-between items-center mb-6">
+                        <h2 className="text-xl font-bold">Today Trending</h2>
+                        <div className="flex space-x-4">
+                            <button
+                                onClick={() => setIsBoxView(!isBoxView)}  // Toggle between box and horizontal view
+                                className="flex items-center bg-gray-200 p-2 rounded-lg"
+                            >
+                                {isBoxView ? (
+                                    <List className="h-5 w-5 mr-2" />
+                                ) : (
+                                    <Layout className="h-5 w-5 mr-2" />
+                                )}
+                                {isBoxView ? 'List View' : 'Box View'}
+                            </button>
                         </div>
                     </div>
 
-                    {/* Blog Titles Table */}
-                    <div className="bg-white shadow-md rounded mt-8 p-4">
-                        <h3 className="text-lg font-bold">Blog Titles</h3>
-                        <p className="text-sm text-gray-500">Manage your blog posts</p>
-                        <table className="min-w-full mt-4">
-                            <thead>
-                                <tr>
-                                    <th className="px-4 py-2">#</th>
-                                    <th className="px-4 py-2">Title</th>
-                                    <th className="px-4 py-2">Date</th>
-                                    <th className="px-4 py-2">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {blogs.map((blog, index) => (
-                                    <tr key={blog._id} className="bg-gradient-to-r from-blue-500 to-purple-500">
-                                        <td className="border px-4 py-2 text-sm text-gray-900 text-center">{index + 1}</td>
-                                        <td className="border px-4 py-2 whitespace-normal break-words">{blog.title}</td>
-                                        <td className="border px-4 py-2">{new Date(blog.createdAt).toLocaleDateString('en-GB')}</td>
-                                        <td className="border px-4 py-2">
-                                            <button className="mr-2 border p-1 rounded" onClick={() => handleUpdate(blog._id)}>
-                                                <Pencil className="h-4 w-4 mr-1" /> Edit
-                                            </button>
-                                            <button className="border p-1 rounded" onClick={() => handleDeleteBlog(blog._id)}>
-                                                <Trash2 className="h-4 w-4 mr-1" /> Delete
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                    {/* Blogs Display */}
+                    <div className={isBoxView ? "grid grid-cols-3 gap-6" : "space-y-6"}>
+                        {blogs.map((blog) => (
+                            <div
+                                key={blog._id}
+                                className={`bg-white p-4 rounded-lg shadow-lg ${
+                                    isBoxView ? "" : "flex items-center space-x-4"
+                                }`}
+                            >
+                                <img
+                                    src={blog.image}
+                                    alt={blog.title}
+                                    className={isBoxView ? "h-32 w-full object-cover rounded-t-lg" : "h-24 w-24 object-cover rounded-lg"}
+                                />
+                                <div className={isBoxView ? "p-4" : "flex-1"}>
+                                    <h3 className="font-semibold mb-2">
+                                        {truncateContent(blog.title, 30)}
+                                    </h3>
+                                    <div className="text-gray-500 text-sm mb-2">
+                                        <LuTimer className="inline-block h-4 w-4 mr-1" />
+                                        {formatDate(blog.createdAt)}
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        {/* <span className="text-yellow-500">★ 4.5</span> */}
+                                        <span className="text-gray-500">{blog.views} views</span>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </main>
             </div>

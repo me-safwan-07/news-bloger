@@ -1,55 +1,76 @@
-// import multer from "multer";
 import Blog from "../models/Blog.js";
+import NewsView from "../models/NewsView.js";
 import { errorHandler } from "../utils/error.js";
-// import slugify from 'slugify'; // Import slugify at the top
 
+// Create Blog Post
 export const create = async (req, res, next) => {
   const { title, content, image } = req.body;
 
-  // Input validation
   if (!title || !content) {
-      return res.status(400).json({ message: 'Title and content are required.' });
+    return res.status(400).json({ message: 'Title and content are required.' });
   }
-  const slug = Math.floor(1000 + Math.random() * 9000); // Keep it simple without strict mode
+
+  // Generate SEO-friendly slug using title and a random number
+  const slug = `${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${Math.floor(1000 + Math.random() * 9000)}`;
+
   const newBlog = new Blog({
     ...req.body,
     slug,
   });
+
   try {
     const savedBlog = await newBlog.save();
-    res.status(201).json({ 
-        message: 'Blog created successfully.', 
-        blog: savedBlog  // Include the created blog in the response
-      });
+    res.status(201).json({ message: 'Blog created successfully.', blog: savedBlog });
   } catch (err) {
-      console.error('Error creating blog:', err);
-      next(err);  // Pass the error to the next middleware for handling
+    console.error('Error creating blog:', err);
+    next(err);
   }
 };
 
-// Get all blogs
+// Get All Blogs
 export const getBlogs = async (req, res, next) => {
   try {
-    const blogs = await Blog.find({}).sort({ updatedAt: -1});
+    const blogs = await Blog.find({}).sort({ updatedAt: -1 });
     res.status(200).json(blogs);
   } catch (err) {
     next(err);
   }
 };
 
+// Get Blog by ID and Track Views
 export const getBlogById = async (req, res, next) => {
   try {
-    const blog = await Blog.findById(req.params.id);
-    if(!blog) {
+    const blogId = req.params.id;
+    const userIp = req.ip;
+
+    // Check if this IP has already viewed the blog in the last 24 hours
+    const existingView = await NewsView.findOne({
+      blogId: blogId,
+      ipAddress: userIp,
+      createdAt: { $gt: new Date(Date.now() - 24 * 60 * 60 * 1000) }  // Last 24 hours
+    });
+
+    if (!existingView) {
+      // Increment the view count if this IP hasn't viewed the blog in the last 24 hours
+      await Blog.findByIdAndUpdate(blogId, { $inc: { views: 1 } });
+
+      // Add a new entry in the NewsView collection to track the unique view
+      const newView = new NewsView({ blogId, ipAddress: userIp });
+      await newView.save();
+    }
+
+    const blog = await Blog.findById(blogId);
+    if (!blog) {
       return res.status(404).json({ message: 'Blog not found' });
     }
+
     res.status(200).json(blog);
   } catch (err) {
     next(err);
   }
-}
+};
 
-// Delete a blog by ID
+// Delete a Blog
 export const deleteBlog = async (req, res, next) => {
   try {
     const blog = await Blog.findByIdAndDelete(req.params.id);
@@ -60,60 +81,28 @@ export const deleteBlog = async (req, res, next) => {
   }
 };
 
-// Update a blog by ID
-export const updateBlog = async (req, res, next) => {
-  upload.single('image')(req, res, async (err) => {
-    if (err) return next(errorHandler(500, 'Error uploading image'));
 
-    try {
-      const updatedData = {
-        title: req.body.title,
-        content: req.body.content,
-        category: req.body.category,
-      };
-
-      if (req.file) {
-        updatedData.image = req.file.path; // Update image if a new one is uploaded
-      }
-
-      const updatedBlog = await Blog.findByIdAndUpdate(
-        req.params.id,
-        { $set: updatedData },
-        { new: true }
-      );
-
-      res.status(200).json(updatedBlog);
-    } catch (err) {
-      next(err);
-    }
-  });
-};
-
-
+// Get Blog Stats (views, total blogs)
 export const getBlogStats = async (req, res, next) => {
   try {
-      // Get total number of posts
-      const totalBlogs = await Blog.countDocuments();
+    // Total number of blogs
+    const totalBlogs = await Blog.countDocuments();
 
-      // Get views per blog per month (assuming you have a 'views' field and a 'createdAt' filed)
-      const blogViewsPerMonth = await Blog.aggregate([
-          {
-            $group: {
-              _id: { month: { $month: "$createdAt" }},
-              totalViews: { $sum: "$views" },
-              totalBlogs: { $sum: 1},
-            },
-          },
-          {
-            $sort: { '_id.month': 1}
-          }
-      ]);
+    // Monthly blog views and counts
+    const blogViewsPerMonth = await Blog.aggregate([
+      {
+        $group: {
+          _id: { month: { $month: "$createdAt" } },
+          totalViews: { $sum: "$views" },
+          totalBlogs: { $sum: 1 }
+        },
+      },
+      { $sort: { '_id.month': 1 } }
+    ]);
 
-      // You can add more aggregations like most popular blog, total views, etc.
-      res.json({ totalBlogs, blogViewsPerMonth });
+    res.json({ totalBlogs, blogViewsPerMonth });
   } catch (err) {
-      console.error(err)
-      next(err);
+    console.error(err);
+    next(err);
   }
 };
-

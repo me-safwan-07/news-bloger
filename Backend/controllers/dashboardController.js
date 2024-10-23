@@ -1,45 +1,20 @@
-import Blog from "../models/Blog";
 
-export const getBlogStats = async (req, res, next) => {
+import BlogView from '../models/BlogView.js';
+
+// Get unique view count for a blog post
+export const getSingleNewsViews = async (req, res, next) => {
     try {
-        // Get total number of posts
-        const totalBlogs = await Blog.countDocuments();
+        const blogId = req.params.id;
 
-        // Get views per blog per month (assuming you have a 'views' field and a 'createdAt' filed)
-        const blogViewsPerMonth = await Blog.aggregate([
-            {
-                $group: {
-                    _id: {
-                        month: { $month: "$createdAt" },
-                    },
-                    totalViwsviews: { $sum: "$views" },
-                    totalBlogs: { $sum: 1},
-                },
-            },
+        const uniqueViews = await BlogView.aggregate([
+            { $match: { blogId: mongoose.Types.ObjectId(blogId) } },
+            { $group: { _id: '$ipAddress' } },  // Group by IP address to count unique views
+            { $count: 'uniqueViewCount' }  // Count the number of unique views
         ]);
 
-        // You can add more aggregations like most popular blog, total views, etc.
-        res.json({ totalBlogs, blogViewsPerMonth });
+        res.json({ uniqueViews: uniqueViews[0]?.uniqueViewCount || 0 });
     } catch (err) {
-        console.error(err)
-        next(err);
+        console.error(err);
+        res.status(500).json({ message: 'Server error.' });
     }
-}
-
-// export const getTotalViews = async (req, res, next) => {
-//     try {
-//         const totalViewsData = await Blog.aggregate([
-//             {
-//                 $group: {
-//                     _id: null,
-//                     totalViews: { $sum: "$views" },
-//                 },
-//             }
-//         ]);
-
-//         const totalViews = totalViewsData[0]?.totalViews || 0;
-//         res.json({ totalViews}) 
-//     } catch (err) {
-//         res.status(500).send({ message: err.message || 'server Error'})
-//     }
-// };
+};
