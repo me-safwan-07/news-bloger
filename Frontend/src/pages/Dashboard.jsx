@@ -14,7 +14,7 @@ function Dashboard() {
     useEffect(() => {
         const fetchBlogs = async () => {
             try {
-                const res = await axios.get('http://localhost:3000/api/blog/get');
+                const res = await axios.get('/api/blog/get');
                 setBlogs(res.data);
             } catch (err) {
                 console.error('Error fetching content:', err);

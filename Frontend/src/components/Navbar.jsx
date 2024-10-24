@@ -11,8 +11,8 @@ const Navbar = () => {
   useEffect(() => {
     const fetchNavOptions = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/categories/');
-        const response2 = await axios.get('http://localhost:3000/api/blog/get/');
+        const response = await axios.get('/api/categories/');
+        const response2 = await axios.get('/api/blog/get/');
         setNavOptions(response.data);
         setNews(response2.data);
       } catch (err) {

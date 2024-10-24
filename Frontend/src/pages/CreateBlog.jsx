@@ -47,7 +47,7 @@ function CreateBlog() {
 
     const fetchCategories = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/api/categories/');
+            const response = await axios.get('/api/categories/');
             setCategory(response.data);
         } catch (error) {
             console.error('Error fetching categories:',error);
@@ -110,7 +110,7 @@ function CreateBlog() {
         };
 
         try {
-            const res = await axios.post('http://localhost:3000/api/blog/create', blogData);
+            const res = await axios.post('/api/blog/create', blogData);
 
             if (res.status === 201) {
                 const blogId = res.data.blogId;

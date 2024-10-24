@@ -29,7 +29,7 @@ function UploadThumbnail() {
 
         try {
             setLoading(true);
-            const res = await axios.post(`http://localhost:3000/api/blog/${blogId}/upload-thumbnail`, formData, {
+            const res = await axios.post(`/api/blog/${blogId}/upload-thumbnail`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

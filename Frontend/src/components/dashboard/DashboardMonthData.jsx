@@ -7,7 +7,7 @@ export const DashboardMonthData = () => {
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const res = await axios.get('http://localhost:3000/api/blog/stats');
+                const res = await axios.get('/api/blog/stats');
                 setStats(res.data);
             } catch (err) {
                 console.error('Error Fetching DashboardMonthData data:', err);

@@ -10,7 +10,7 @@ export default function DashboardCategory() {
         const fetchCategories = async () => {
             setLoading(true);
             try {
-                const res = await fetch('http://localhost:3000/api/categories');
+                const res = await fetch('/api/categories');
                 const data = await res.json();
                 setCategories(data);
             } catch (err) {
@@ -33,7 +33,7 @@ export default function DashboardCategory() {
 
         try {
             setLoading(true);
-            const res = await fetch('http://localhost:3000/api/categories/update', {
+            const res = await fetch('/api/categories/update', {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ categories: categoriesToUpdate })
@@ -60,7 +60,7 @@ export default function DashboardCategory() {
         const newCat = { category: newCategory };
         try {
             setLoading(true);
-            const res = await fetch('http://localhost:3000/api/categories/add', {
+            const res = await fetch('/api/categories/add', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newCat)

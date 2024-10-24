@@ -20,7 +20,7 @@ const AuthProvider = ({ children }) => {
 
     // const login = async (email, password) => {
     //     try {
-    //         const response = await axios.post('http://localhost:3000/api/login', { email, password });
+    //         const response = await axios.post('/api/login', { email, password });
     //         const token = response.data.token;
     //         setAdmin(token);
     //         setIsLoggedIn(true); // Set logged in state to true

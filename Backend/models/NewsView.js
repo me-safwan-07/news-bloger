@@ -17,6 +17,6 @@ const NewsViewsSchema = new mongoose.Schema({
     }
 });
 
-const Blog = mongoose.model('NewsView', BlogSchema);
+const Blog = mongoose.model('NewsView', NewsViewsSchema);
 
 export default Blog;

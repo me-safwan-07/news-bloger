@@ -63,7 +63,7 @@ const Header = () => {
     useEffect(() => {
         const fetchNavOptions = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/api/categories/');
+                const response = await axios.get('/api/categories/');
                 setNavOptions(response.data);
             } catch (err) {
                 console.error('Error fetching navigation options:', err);

@@ -29,7 +29,7 @@ const Home = () => {
     useEffect(() => {
         const fetchBlogs = async () => {
             try {
-                const res = await fetch('http://localhost:3000/api/blog/get');
+                const res = await fetch('/api/blog/get');
                 if (!res.ok) {
                     throw new Error('Network response was not ok');
                 }
