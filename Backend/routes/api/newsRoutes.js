@@ -6,7 +6,7 @@ import {
   deleteBlog, 
   // updateBlog, 
   getBlogStats 
-} from '../controllers/blogController.js';
+} from '../../controllers/news.Controller.js';
 
 const router = express.Router();
 

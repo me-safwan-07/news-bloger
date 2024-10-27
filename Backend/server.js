@@ -1,49 +1,49 @@
 import express from 'express';
+import chalk from 'chalk';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import blogrouter from './routes/blogRoutes.js';
-import categoriesrouter from './routes/categoryRoutes.js';
-import dashboardrouter from './routes/dashboardRoutes.js';
 import cors from 'cors';
-// import adminRoutes from './routes/adminRoutes.js';
+import helmet from 'helmet';
+
+import { keys } from './config/keys.js'
+import routes from './routes/index.js';
+import setupDB from './utils/db.js';
+
 dotenv.config();
 
-const connectDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,        // Required for backward compatibility
-      useUnifiedTopology: true,     // Helps with handling MongoDB connections smoothly
-    });
-    console.log('MongoDB is connected');
-  } catch (err) {
-    console.error('Failed to connect to MongoDB', err);
-    process.exit(1);  // Exit process with failure
-  }
-};
+const { port } = keys;
+const app = express();
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+// app.use(
+//   helmet({
+//     contentSecurityPolicy: false,
+//     frameguard: true
+//   })
+// );
+app.use(cors());
 
 // Connect to MongoDB
-connectDB();
+setupDB();
 
-  const app = express();
-  app.use(express.urlencoded({ limit: '1mb', extended: true }));
-  app.use(cors());  // Enable CORS for cross-origin requests
-  app.use(express.json({ limit: '1mb'}));
-  const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
+app.use(routes);
 
-  app.use('/api/blog', blogrouter);
-  app.use('/api/categories', categoriesrouter);
-  app.use('/api/dashboard', dashboardrouter);
+app.listen(port, () => {
+  console.log(
+    `${chalk.green('✓')} ${chalk.blue(
+      `Listening on port ${port}. Visit http://localhost:${port}/ in your browser.`
+    )}`
+  );
+});
 
   // app.use('api/dashboard', dashboardrouter);
-  app.use((err, req, res, next) => {
-    const statusCode = res.statusCode || 500;
-    const message = err.message || 'Internal server error';
-    res.status(statusCode).json({
-      success: true,
-      statusCode,
-      message,
-    }) 
-  });
+app.use((err, req, res, next) => {
+  const statusCode = res.statusCode || 500;
+  const message = err.message || 'Internal server error';
+  res.status(statusCode).json({
+    success: true,
+    statusCode,
+    message,
+  }) 
+});

@@ -1,4 +1,4 @@
-import Blog from "../models/Blog.js";
+import Blog from "../models/News.js";
 import NewsView from "../models/NewsView.js";
 import { errorHandler } from "../utils/error.js";
 
