@@ -8,15 +8,17 @@ const { database } = keys;
 
 const setupDB = async () => {
   try {
-    // console.log('Database URL:', database.url); // Log the URL for debugging
-    await mongoose.connect(database.url, {
-      useNewUrlParser: true,
-    //   useUnifiedTopology: true,
-    //   useFindAndModify: false
-    });
+    // Ensure the database URL is defined
+    if (!database.url) {
+      throw new Error('Database URL is not defined in the configuration.');
+    }
+    
+    await mongoose.connect(database.url);
+
     console.log(`${chalk.green('✓')} ${chalk.blue('MongoDB Connected!')}`);
   } catch (error) {
     console.error(`${chalk.red('✗')} ${chalk.yellow('MongoDB Connection Error:')} ${error.message}`);
+    // Optionally rethrow the error or handle it as needed
   }
 };
 
