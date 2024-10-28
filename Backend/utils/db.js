@@ -8,8 +8,8 @@ const { database } = keys;
 
 const setupDB = async () => {
   try {
-    console.log('Database URL:', database.url); // Log the URL for debugging
-    await mongoose.connect('mongodb://localhost:27017/news-blog', {
+    // console.log('Database URL:', database.url); // Log the URL for debugging
+    await mongoose.connect(database.url, {
       useNewUrlParser: true,
     //   useUnifiedTopology: true,
     //   useFindAndModify: false

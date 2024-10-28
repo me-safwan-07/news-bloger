@@ -1,6 +1,6 @@
 import express from 'express';
 import chalk from 'chalk';
-import mongoose from 'mongoose';
+// import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -16,12 +16,12 @@ const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// app.use(
-//   helmet({
-//     contentSecurityPolicy: false,
-//     frameguard: true
-//   })
-// );
+app.use(
+  helmet({
+    contentSecurityPolicy: false,
+    frameguard: true
+  })
+);
 app.use(cors());
 
 // Connect to MongoDB
