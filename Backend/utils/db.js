@@ -1,5 +1,4 @@
 import dotenv from 'dotenv';
-// import chalk from 'chalk';
 import mongoose from 'mongoose';
 import { keys } from '../config/keys.js';
 
