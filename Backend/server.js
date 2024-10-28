@@ -29,6 +29,9 @@ setupDB();
 
 app.use(routes);
 
+app.get('/', (req, res) => {
+  res.send('Hello world');
+})
 app.listen(port, () => {
   console.log(
     `${chalk.green('✓')} ${chalk.blue(
