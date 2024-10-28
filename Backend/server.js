@@ -1,7 +1,7 @@
 /* This code snippet is a basic setup for a Node.js application using Express framework. Here's a
 breakdown of what the code is doing: */
 import express from 'express';
-import chalk from 'chalk';
+// import chalk from 'chalk';
 // import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -36,9 +36,7 @@ app.get('/', (req, res) => {
 })
 app.listen(port, () => {
   console.log(
-    `${chalk.green('✓')} ${chalk.blue(
       `Listening on port ${port}. Visit http://localhost:${port}/ in your browser.`
-    )}`
   );
 });
 

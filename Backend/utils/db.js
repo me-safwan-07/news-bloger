@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import chalk from 'chalk';
+// import chalk from 'chalk';
 import mongoose from 'mongoose';
 import { keys } from '../config/keys.js';
 
@@ -15,9 +15,9 @@ const setupDB = async () => {
     
     await mongoose.connect(database.url);
 
-    console.log(`${chalk.green('✓')} ${chalk.blue('MongoDB Connected!')}`);
+    console.log('MongoDB Connected!');
   } catch (error) {
-    console.error(`${chalk.red('✗')} ${chalk.yellow('MongoDB Connection Error:')} ${error.message}`);
+    console.error(`MongoDB Connection Error:'`);
     // Optionally rethrow the error or handle it as needed
   }
 };
