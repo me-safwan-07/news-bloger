@@ -8,11 +8,11 @@ const { database } = keys;
 const setupDB = async () => {
   try {
     // Ensure the database URL is defined
-    if (!database.url) {
+    if (!process.env.MONGO_URI) {
       throw new Error('Database URL is not defined in the configuration.');
     }
     
-    await mongoose.connect(database.url);
+    await mongoose.connect(process.env.MONGO_URI);
 
     console.log('MongoDB Connected!');
   } catch (error) {
