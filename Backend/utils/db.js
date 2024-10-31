@@ -13,11 +13,7 @@ const setupDB = async () => {
       throw new Error('Database URL is not defined in the configuration.');
     }
 
-    await mongoose.connect(mongoURI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-
+    await mongoose.connect(mongoURI);
     console.log('MongoDB Connected!');
   } catch (error) {
     console.error(`MongoDB Connection Error: ${error.message}`);
